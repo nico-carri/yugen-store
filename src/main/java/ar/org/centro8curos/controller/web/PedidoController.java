@@ -2,7 +2,6 @@ package ar.org.centro8curos.controller.web;
 
 import java.security.Principal;
 import java.util.List;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,84 +32,60 @@ public class PedidoController {
         this.carritoService = carritoService;
     }
 
-    /**
-     * Proceso de finalización de compra desde el Modal.
-     */
     @GetMapping("/finalizar")
     public String finalizarPedidoProceso(Principal principal, RedirectAttributes redirectAttributes) {
-        // 1. Validar Sesión
-        if (principal == null) {
-            redirectAttributes.addFlashAttribute("error", "Debes iniciar sesión para finalizar la compra.");
-            return "redirect:/usuario/login";
-        }
+    // 1. Validar sesión de forma limpia
+    if (principal == null) return "redirect:/usuario/login";
 
-        try {
-            // 2. Obtener Usuario
-            String email = principal.getName();
-            Usuario usuario = usuarioService.findByEmail(email);
-
-            if (usuario == null) {
-                throw new RuntimeException("Usuario no encontrado.");
-            }
-
-            // 3. Validar Carrito
+    try {
+            Usuario usuario = usuarioService.findByEmail(principal.getName());
             List<ItemCarritoDTO> items = carritoService.getCarritoItems();
-            if (items == null || items.isEmpty()) {
-                redirectAttributes.addFlashAttribute("error", "El carrito está vacío.");
-                return "redirect:/home"; // O a la url del catálogo
+
+            if (items.isEmpty()) {
+                redirectAttributes.addFlashAttribute("error", "Carrito vacío");
+                return "redirect:/carrito";
             }
-
-            // 4. Crear Pedido en DB
             Pedido nuevoPedido = pedidoService.crearPedido(usuario.getIdUser(), items);
-
-            // 5. Limpiar Carrito de la sesión
             carritoService.clearCarrito();
 
-            redirectAttributes.addFlashAttribute("mensaje", "¡Compra realizada con éxito!");
-
-            // Redirige al detalle del pedido recién creado
             return "redirect:/pedidos/detalle/" + nuevoPedido.getIdPedido();
 
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Ocurrió un error: " + e.getMessage());
-            return "redirect:/home";
+            System.out.println("ERROR EN FINALIZAR: " + e.getMessage()); 
+            redirectAttributes.addFlashAttribute("error", "Error: " + e.getMessage());
+            return "redirect:/";
         }
     }
 
-    /**
-     * Ver el detalle de un pedido específico (Ticket).
-     */
     @GetMapping("/detalle/{idPedido}")
     public String verDetallePedido(@PathVariable Integer idPedido, Model model, RedirectAttributes redirectAttributes) {
-        try {
-            Pedido pedido = pedidoService.findPedidoById(idPedido);
-            model.addAttribute("pedido", pedido);
+    try {
+            Pedido pedido = pedidoService.findPedidoById(idPedido.longValue())
+                    .orElseThrow(() -> new RuntimeException("El pedido no existe"));
 
-            // CAMBIO: Debe decir "pedidos" con S al final
-            return "pedidos/detalle_pedido";
+            model.addAttribute("pedido", pedido);
+            return "pedidos/detalle-pedido"; 
 
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error al buscar el detalle");
+            redirectAttributes.addFlashAttribute("error", "Error al buscar el detalle: " + e.getMessage());
             return "redirect:/productos/catalogo";
         }
     }
 
-    /**
-     * Historial de pedidos para el usuario logueado.
-     */
     @GetMapping("/historial")
     public String verHistorial(Principal principal, Model model, RedirectAttributes redirectAttributes) {
-        if (principal == null)
+        if (principal == null) {
             return "redirect:/usuario/login";
+        }
 
         try {
             Usuario usuario = usuarioService.findByEmail(principal.getName());
             List<Pedido> pedidos = pedidoService.findPedidoHistoryByUserId(usuario.getIdUser());
             model.addAttribute("pedidos", pedidos);
-            return "historial";
+            return "pedidos/historial";
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error al cargar el historial.");
-            return "redirect:/home";
+            return "redirect:/";
         }
     }
 }

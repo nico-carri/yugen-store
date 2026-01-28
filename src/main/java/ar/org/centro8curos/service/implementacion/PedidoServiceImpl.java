@@ -11,13 +11,15 @@ import ar.org.centro8curos.service.IPedidoService;
 import ar.org.centro8curos.service.IProductoService;
 import ar.org.centro8curos.service.IUsuarioService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.ArrayList;
 
 @Service
 public class PedidoServiceImpl implements IPedidoService {
@@ -73,17 +75,41 @@ public class PedidoServiceImpl implements IPedidoService {
         nuevoPedido.setDetallesPedido(detalles);
         nuevoPedido.setTotal(totalPedido);
 
-        return pedidoRepository.save(nuevoPedido);
-    }
+        Pedido pedidoGuardado = pedidoRepository.save(nuevoPedido);
+        try {
+            salesforceService.procesarVentaParaSalesforce(pedidoGuardado);
+        } catch (Exception e) {
+            System.err.println("Error de sincronización con Salesforce: " + e.getMessage());
+        }
 
-    @Override
-    public Pedido findPedidoById(Integer orderId) {
-        return pedidoRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Pedido no encontrado con ID: " + orderId));
+        return pedidoGuardado;
     }
 
     @Override
     public List<Pedido> findPedidoHistoryByUserId(Integer userId) {
-        return pedidoRepository.findByUsuarioIdUser(userId);
+        return pedidoRepository.findByUsuarioIdUserOrderByFechaDesc(userId);
     }
+
+    @Override
+    public List<Pedido> findAll() { 
+        return pedidoRepository.findAll();
+    }
+
+    
+    public long countPedidos() {
+        return pedidoRepository.count();
+    }
+
+    @Override
+    public Optional<Pedido> findPedidoById(Long orderId) {
+    return pedidoRepository.findById(orderId.intValue());
+    }
+    
+
+    @Autowired
+    private SalesforceService salesforceService;
+
+
+
+
 }

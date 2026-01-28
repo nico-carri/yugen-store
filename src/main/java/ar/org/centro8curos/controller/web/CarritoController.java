@@ -1,5 +1,7 @@
 package ar.org.centro8curos.controller.web;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,9 @@ import ar.org.centro8curos.model.Producto;
 import ar.org.centro8curos.service.ICarritoService;
 import ar.org.centro8curos.service.IProductoService;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 
 @Controller
 @RequestMapping("/carrito")
@@ -31,56 +36,39 @@ public class CarritoController {
     @GetMapping
     public String verCarrito(Model modelo) {
         modelo.addAttribute("items", carritoService.getCarritoItems());
-        modelo.addAttribute("total", carritoService.getCarritoItems().stream()
-                .mapToDouble(ItemCarritoDTO::getSubTotal).sum());
+        modelo.addAttribute("total", carritoService.getTotalPrecio());
+        modelo.addAttribute("totalUnidades", carritoService.getTotalItems());
         return "carrito/ver-carrito";
     }
 
     @PostMapping("/agregar")
-    public String agregarAlCarrito(@RequestParam("id") Integer id,
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> agregarAlCarrito(@RequestParam("id") Integer id,
             @RequestParam("cantidad") Integer cantidad) {
+
+        Map<String, Object> response = new HashMap<>();
         Optional<Producto> pOptional = productoService.findById(id);
+
         if (pOptional.isPresent()) {
             Producto p = pOptional.get();
             ItemCarritoDTO item = new ItemCarritoDTO(
-                    p.getIdProducto(),
-                    p.getNombre(),
-                    p.getPrecio().doubleValue(),
-                    p.getUrlImg(),
-                    cantidad);
+                    p.getIdProducto(), p.getNombre(),
+                    p.getPrecio().doubleValue(), p.getUrlImg(), cantidad);
+
             carritoService.addItem(item);
+
+            int totalItems = carritoService.getTotalItems();
+
+            response.put("status", "success");
+            response.put("message", "¡" + p.getNombre() + " añadido al carrito!");
+            response.put("totalCarrito", totalItems);
+
+            return ResponseEntity.ok(response);
         }
-        return "redirect:/productos/catalogo";
-    }
 
-    // --- MÉTODOS PARA SUMAR Y RESTAR ---
-
-    @GetMapping("/sumar/{id}")
-    public String sumar(@PathVariable Integer id, HttpServletRequest request) {
-        carritoService.getCarritoItems().stream()
-                .filter(i -> i.getIdProducto().equals(id))
-                .findFirst()
-                .ifPresent(i -> i.setCantidadDeseada(i.getCantidadDeseada() + 1));
-
-        // Esto te devuelve a la página exacta donde hiciste click
-        String referer = request.getHeader("Referer");
-        return "redirect:" + (referer != null ? referer : "/home");
-    }
-
-    @GetMapping("/restar/{id}")
-    public String restar(@PathVariable Integer id, HttpServletRequest request) {
-        carritoService.getCarritoItems().stream()
-                .filter(i -> i.getIdProducto().equals(id))
-                .findFirst()
-                .ifPresent(i -> {
-                    if (i.getCantidadDeseada() > 1) {
-                        i.setCantidadDeseada(i.getCantidadDeseada() - 1);
-                    } else {
-                        carritoService.removeItem(id);
-                    }
-                });
-        String referer = request.getHeader("Referer");
-        return "redirect:" + (referer != null ? referer : "/home");
+        response.put("status", "error");
+        response.put("message", "Producto no encontrado");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
     @GetMapping("/eliminar/{id}")
@@ -88,5 +76,26 @@ public class CarritoController {
         carritoService.removeItem(id);
         String referer = request.getHeader("Referer");
         return "redirect:" + (referer != null ? referer : "/home");
+    }
+
+    @GetMapping("/sumar/{id}")
+    public String sumar(@PathVariable Integer id, HttpServletRequest request) {
+        carritoService.incrementarCantidad(id);
+        String referer = request.getHeader("Referer");
+        return "redirect:" + (referer != null ? referer : "/home");
+    }
+
+    @GetMapping("/restar/{id}")
+    public String restar(@PathVariable Integer id, HttpServletRequest request) {
+        carritoService.decrementarCantidad(id);
+        String referer = request.getHeader("Referer");
+        return "redirect:" + (referer != null ? referer : "/home");
+    }
+
+    @GetMapping("/resumen")
+    public String resumenCarrito(Model modelo) {
+        modelo.addAttribute("items", carritoService.getCarritoItems());
+        modelo.addAttribute("total", carritoService.getTotalPrecio());
+        return "carrito/fragmento-carrito :: lista";
     }
 }

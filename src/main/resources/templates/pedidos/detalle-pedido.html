@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{layout :: head}">
+    <title>Resumen de Compra - Yugen Store</title>
+</head>
+
+<body class="wrapper bg-light">
+    <div th:replace="~{layout :: header}"></div>
+
+    <main class="container content my-5" style="margin-top: 100px !important;">
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+                <div class="card shadow border-0 overflow-hidden">
+                    <div class="card-header bg-success text-white py-4 text-center">
+                        <i class="bi bi-check-circle-fill fs-1"></i>
+                        <h2 class="mb-0 mt-2 fw-bold">¡Gracias por tu compra!</h2>
+                        <p class="mb-0 opacity-75">Tu pedido ha sido procesado con éxito</p>
+                    </div>
+
+                    <div class="card-body p-4 p-md-5 bg-white">
+                        <div class="row mb-4">
+                            <div class="col-sm-6">
+                                <h6 class="text-muted text-uppercase small fw-bold">Información del Pedido</h6>
+                                <h4 class="fw-bold text-dark">Orden #<span th:text="${pedido.idPedido}"></span></h4>
+                                <p class="text-muted mb-0"
+                                    th:text="${#temporals.format(pedido.fecha, 'dd/MM/yyyy HH:mm')}"></p>
+                            </div>
+                            <div class="col-sm-6 text-sm-end mt-3 mt-sm-0">
+                                <h6 class="text-muted text-uppercase small fw-bold">Estado del Pago</h6>
+                                <span class="badge bg-success fs-6 px-3 rounded-pill">Aprobado</span>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="border-0 ps-3">Producto</th>
+                                        <th class="border-0 text-center">Cant.</th>
+                                        <th class="border-0 text-end">Precio Unit.</th>
+                                        <th class="border-0 text-end pe-3">Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="det : ${pedido.detallesPedido}">
+                                        <td class="ps-3">
+                                            <span class="fw-bold" th:text="${det.producto.nombre}"></span>
+                                        </td>
+                                        <td class="text-center" th:text="${det.cantidad}"></td>
+                                        <td class="text-end" th:text="'$' + ${det.precioUnitario}"></td>
+                                        <td class="text-end fw-bold pe-3" th:text="'$' + ${det.subTotal}"></td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="3" class="text-end border-0 pt-4">
+                                            <h4 class="fw-bold">Total Pagado:</h4>
+                                        </td>
+                                        <td class="text-end border-0 pt-4 pe-3">
+                                            <h4 class="fw-bold text-success" th:text="'$' + ${pedido.total}"></h4>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="card-footer bg-white p-4 border-top-0 d-flex flex-wrap gap-2 justify-content-between">
+                        <div class="d-flex gap-2">
+                            <a th:href="@{/pedidos/historial}" class="btn btn-outline-dark rounded-pill px-4">
+                                <i class="bi bi-list-ul me-2"></i>Mis Pedidos
+                            </a>
+                            <a th:href="@{/}" class="btn btn-link text-decoration-none text-muted">Volver al Inicio</a>
+                        </div>
+                        <button onclick="window.print()" class="btn btn-primary rounded-pill px-4 shadow-sm">
+                            <i class="bi bi-printer me-2"></i>Imprimir Ticket
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        window.onload = function() {
+            setTimeout(function() {
+                window.print();
+            }, 500);
+        };
+    </script>
+    <div th:replace="~{layout :: footer}"></div>
+    <div th:replace="~{layout :: js-scripts}"></div>
+</body>
+
+</html>

@@ -1,0 +1,12 @@
+CRÉDITOS DE RECURSOS - YUGEN STORE
+----------------------------------
+
+DISEÑO DE MARCA:
+- Logo: Generado mediante Inteligencia Artificial (2024).
+
+IMÁGENES Y BANNERS:
+- Carrusel y Categorías: Imágenes obtenidas de Unsplash (https://unsplash.com) bajo licencia libre.
+
+TECNOLOGÍAS Y RECURSOS WEB:
+- Iconografía: Bootstrap Icons.
+- Framework: Spring Boot & Thymeleaf.

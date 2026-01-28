@@ -15,4 +15,8 @@ public interface ICarritoService {
     int getTotalItems();
 
     double getTotalPrecio();
+
+    void incrementarCantidad(Integer productId);
+
+    void decrementarCantidad(Integer productId);
 }

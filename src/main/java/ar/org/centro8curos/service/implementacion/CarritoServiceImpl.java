@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-// 🔑 Vive en la sesión HTTP
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class CarritoServiceImpl implements ICarritoService {
 
@@ -54,8 +53,33 @@ public class CarritoServiceImpl implements ICarritoService {
 
     @Override
     public double getTotalPrecio() {
-        return cartItems.stream()
+        double total = cartItems.stream()
                 .mapToDouble(item -> item.getPrecio() * item.getCantidadDeseada())
                 .sum();
+        return Math.round(total * 100.0) / 100.0;
+    }
+
+    @Override
+    public void incrementarCantidad(Integer productId) {
+        cartItems.stream()
+                .filter(i -> i.getIdProducto().equals(productId))
+                .findFirst()
+                .ifPresent(i -> {
+                    i.setCantidadDeseada(i.getCantidadDeseada() + 1);
+                });
+    }
+
+    @Override
+    public void decrementarCantidad(Integer productId) {
+        getCarritoItems().stream()
+                .filter(i -> i.getIdProducto().equals(productId))
+                .findFirst()
+                .ifPresent(i -> {
+                    if (i.getCantidadDeseada() > 1) {
+                        i.setCantidadDeseada(i.getCantidadDeseada() - 1);
+                    } else {
+                        removeItem(productId);
+                    }
+                });
     }
 }

@@ -1,0 +1,20 @@
+<div th:fragment="lista">
+    <div th:if="${items.empty}" class="text-center py-5">
+        <p class="text-muted">El carrito está vacío</p>
+    </div>
+    <ul class="list-group list-group-flush" th:unless="${items.empty}">
+        <li th:each="item : ${items}" class="list-group-item d-flex justify-content-between align-items-center px-0">
+            <div class="d-flex align-items-center">
+                <img th:src="${item.urlImg}" width="50" class="rounded me-2">
+                <div>
+                    <h6 class="mb-0 small" th:text="${item.nombre}">Nombre</h6>
+                    <small class="text-muted" th:text="${item.cantidadDeseada} + ' x $' + ${item.precio}"></small>
+                </div>
+            </div>
+            <span class="fw-bold" th:text="'$' + ${item.getSubTotal()}"></span>
+        </li>
+    </ul>
+    <div class="mt-3 text-end" th:if="${!items.empty}">
+        <h5>Total: <span class="text-primary" th:text="'$' + ${total}"></span></h5>
+    </div>
+</div>

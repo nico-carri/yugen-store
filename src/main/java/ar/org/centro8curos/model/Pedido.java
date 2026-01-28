@@ -14,26 +14,29 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "pedidos")
+@Table(name = "PEDIDOS")
 @Entity
 public class Pedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_pedido")
-    private Integer idPedido;
+    @Column(name = "ID_PEDIDO")
+    private Long idPedido;
 
-    @Column(name = "fecha", nullable = false)
+    @Column(name = "FECHA", nullable = false)
     private LocalDateTime fecha;
 
     @Enumerated(EnumType.STRING)
     @NotNull(message = "El estado no puede ser nulo")
-    @Column(name = "estado", nullable = false)
+    @Column(name = "ESTADO", nullable = false)
     private EstadoDePedido estado;
 
     @NotNull(message = "El total no puede ser nulo")
-    @Column(name = "total", nullable = false)
+    @Column(name = "TOTAL", nullable = false)
     private BigDecimal total;
+
+    @Column(name = "SALESFORCE_ORDER_ID", unique = true)
+    private String salesforceOrderId;
 
     @ManyToOne
     @JoinColumn(name = "id_user", nullable = false)
@@ -45,5 +48,6 @@ public class Pedido {
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
     private List<Pago> pagos;
+
 
 }

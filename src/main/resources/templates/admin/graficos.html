@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head}">
+    <title>Analítica Pro - Yugen Store</title>
+</head>
+<body class="wrapper">
+    <div th:replace="~{layout :: header}"></div>
+
+    <main class="container-fluid px-4 my-5 content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold mb-0">
+                <i class="bi bi-cpu-fill me-2 text-primary"></i>Business Intelligence & Analytics
+            </h2>
+            <span class="badge bg-success-subtle text-success border border-success px-3 py-2">
+                <i class="bi bi-cloud-check-fill me-1"></i> Sincronizado con Salesforce
+            </span>
+        </div>
+        
+        <div class="row g-4 mb-4">
+            <div class="col-md-4">
+                <div class="card card-stats border-0 shadow-sm bg-dark text-white p-4 h-100">
+                    <h6 class="text-uppercase small opacity-75 fw-bold">Facturación Bruta (App)</h6>
+                    <h2 class="display-5 fw-bold mb-2" th:text="'$' + ${#numbers.formatDecimal(totalVentas, 0, 'POINT', 2, 'COMMA')}"></h2>
+                    <p class="small text-success mb-0"><i class="bi bi-arrow-up"></i> Datos locales procesados</p>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="card border-0 shadow-sm p-4 h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold mb-0">Estado Logístico de Pedidos</h5>
+                        <small class="text-muted">Actualización local</small>
+                    </div>
+                    <div style="height: 200px;">
+                        <canvas id="chartPedidos"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm p-4">
+                    <div class="mb-4">
+                        <h5 class="fw-bold mb-1">Deep Analysis - Dashboard Estratégico</h5>
+                        <p class="text-muted small">Análisis avanzado de segmentación, tendencias temporales y geolocalización.</p>
+                    </div>
+
+                    <div class="tableau-wrapper">
+                        <div class='tableauPlaceholder' id='viz1769497529089' style='position: relative'><noscript>
+                            <a href='#'><img alt='Dashboard de Ventas ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;E-&#47;E-commerceDashboarddeVentas&#47;DashboarddeVentas&#47;1_rss.png' style='border: none' />
+                            </a></noscript>
+                            <object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> 
+                                <param name='embed_code_version' value='3' /> <param name='site_root' value='' />
+                                <param name='name' value='E-commerceDashboarddeVentas&#47;DashboarddeVentas' />
+                                <param name='tabs' value='no' /><param name='toolbar' value='yes' />
+                                <param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;E-&#47;E-commerceDashboarddeVentas&#47;DashboarddeVentas&#47;1.png' />
+                                <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' />
+                                <param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' />
+                                <param name='display_count' value='yes' /><param name='language' value='es-ES' /><param name='filter' value='publish=yes' />
+                            </object>
+                        </div>
+                            <script type='text/javascript'> 
+                                var divElement = document.getElementById('viz1769497529089');                    
+                                var vizElement = divElement.getElementsByTagName('object')[0];                    
+                                    if ( divElement.offsetWidth > 800 ) { vizElement.style.width='1366px';vizElement.style.height='795px';} 
+                                        else if ( divElement.offsetWidth > 500 ) { vizElement.style.width='1366px';vizElement.style.height='795px';}
+                                        else { vizElement.style.width='100%';vizElement.style.height='1427px';}                     
+                                        var scriptElement = document.createElement('script');                    
+                                        scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    
+                                        vizElement.parentNode.insertBefore(scriptElement, vizElement);                
+                            </script>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 p-3 bg-light rounded border-start border-4 border-primary">
+                        <p class="mb-0 small text-dark">
+                            <strong><i class="bi bi-info-square-fill me-2 text-primary"></i>Nota de Arquitectura:</strong> 
+                            Este dashboard consume datos inyectados vía API REST desde esta aplicación hacia Salesforce CRM, demostrando un flujo de datos punta a punta (End-to-End).
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script th:inline="javascript">
+        // Datos pasados desde el Controller
+        const completados = /*[[${completados}]]*/ 0;
+        const pendientes = /*[[${pendientes}]]*/ 0;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('chartPedidos');
+            if (ctx) {
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Completados', 'Pendientes'],
+                        datasets: [{
+                            data: [completados, pendientes],
+                            backgroundColor: ['#198754', '#ffc107'],
+                            hoverOffset: 15,
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        cutout: '70%', // Hace la dona más fina/moderna
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                                labels: { padding: 20, font: { weight: 'bold' } }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+
+    <div th:replace="~{layout :: footer}"></div>
+    <div th:replace="~{layout :: js-scripts}"></div>
+</body>
+</html>

@@ -4,42 +4,44 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import ar.org.centro8curos.model.enums.EstadoPago;
+import ar.org.centro8curos.model.enums.MetodoPago;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "pagos")
+@Table(name = "PAGOS")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class Pago {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_pago")
+    @Column(name = "ID_PAGO")
     private Integer idPago;
 
-    @NotBlank(message = "El metodo de pago no puede estar vacio")
-    @Column(name = "metodo_pago", nullable = false)
-    private String metodoPago;
+    @NotNull(message = "El método de pago no puede ser nulo")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "METODO_PAGO", nullable = false)
+    private MetodoPago metodoPago;
 
-    @NotBlank(message = "El monto no puede estar vacio")
-    @Column(name = "monto", nullable = false)
+    @NotNull(message = "El monto no puede ser nulo")
+    @Column(name = "MONTO", nullable = false)
     private BigDecimal monto;
 
-    @ManyToOne
-    @JoinColumn(name = "id_pedido", nullable = false)
-    private Pedido pedido;
-
-    @NotBlank(message = "La fecha de pago no puede estar vacia")
-    @Column(name = "fecha_pago", nullable = false)
+    @NotNull(message = "La fecha de pago no puede ser nula")
+    @Column(name = "FECHA_PAGO", nullable = false)
     private LocalDateTime fechaPago;
 
-    @Column(name = "transaccion_id", nullable = false, unique = true)
+    @Column(name = "TRANSACCION_ID  ", nullable = false, unique = true)
     private String transaccionId;
 
     @Enumerated(EnumType.STRING)
     private EstadoPago estadoPago;
+
+    @ManyToOne
+    @JoinColumn(name = "id_pedido", nullable = false)
+    private Pedido pedido;
 }

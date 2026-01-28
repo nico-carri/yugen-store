@@ -12,10 +12,10 @@ import ar.org.centro8curos.model.enums.EstadoDePedido;
 @Repository
 public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
 
-    Optional<Pedido> findByUsuarioIdUserAndEstado(Integer idUser, EstadoDePedido estado);
+    Optional<Pedido> findByUsuarioIdUserAndEstado(Long idUser, EstadoDePedido estado);
 
-    List<Pedido> findByUsuarioIdUserAndEstadoNot(Integer idUser, EstadoDePedido estadoExcluir);
+    List<Pedido> findByUsuarioIdUserAndEstadoNot(Long idUser, EstadoDePedido estadoExcluir);
 
-    List<Pedido> findByUsuarioIdUser(Integer userId);
+    List<Pedido> findByUsuarioIdUserOrderByFechaDesc(Integer userId);
 
 }

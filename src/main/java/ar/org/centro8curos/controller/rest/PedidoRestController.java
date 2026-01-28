@@ -55,9 +55,12 @@ public class PedidoRestController {
      * GET /api/v1/pedidos/1
      * Obtiene el detalle de un pedido específico.
      */
-    @GetMapping("/{id}")
-    public Pedido obtenerDetallePedido(@PathVariable Integer id) {
-        // Asumiendo que findPedidoById ya maneja el Not Found con una excepción
-        return pedidoService.findPedidoById(id);
-    }
+   //@GetMapping("/{id}")
+//public ResponseEntity<Pedido> obtenerDetallePedido(@PathVariable Integer id) {
+    // 1. Convertimos el Integer de la URL a Long para el Service
+    // 2. Usamos Optional para manejar de forma limpia si el pedido existe o no
+    //return Optional.ofNullable(pedidoService.findPedidoById(id.longValue()))
+    //        .map(pedido -> new ResponseEntity<>(pedido, HttpStatus.OK))
+    //        .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND)); // Retorna 404 si no existe
+//}
 }

@@ -20,29 +20,29 @@ public class ProductoController {
         this.productoService = productoService;
     }
 
-    /**
-     * Muestra la lista completa de productos.
-     * Busca el archivo en templates/productos/catalogo.html
-     */
     @GetMapping("/catalogo")
-    public String verCatalogo(Model modelo) {
-        List<Producto> productos = productoService.findAll();
-        modelo.addAttribute("productos", productos);
-        return "productos/catalogo";
-    }
+    public String verCatalogo(
+            @RequestParam(name = "categoria", required = false) String categoria,
+            @RequestParam(name = "search", required = false) String nombre,
+            Model modelo) {
 
-    /**
-     * Busca productos por categoría.
-     * Reutiliza la vista templates/productos/catalogo.html
-     */
-    @GetMapping("/buscar")
-    public String buscarPorCategoria(@RequestParam("categoria") String categoria, Model modelo) {
-        List<Producto> productos = productoService.findAllByCategory(categoria);
-        modelo.addAttribute("categoriaBuscada", categoria);
-        if (productos.isEmpty()) {
-            String mensaje = "No se encontraron productos en la categoría: " + categoria;
-            modelo.addAttribute("mensajeNoResultados", mensaje);
+        List<Producto> productos;
+
+        if (categoria != null && !categoria.isEmpty()) {
+            productos = productoService.findAllByCategoria(categoria);
+            modelo.addAttribute("tituloPagina", "Categoría: " + categoria);
+        } else if (nombre != null && !nombre.isEmpty()) {
+            productos = productoService.findByNombreContainingIgnoreCase(nombre);
+            modelo.addAttribute("tituloPagina", "Resultados para: '" + nombre + "'");
+        } else {
+            productos = productoService.findAll();
+            modelo.addAttribute("tituloPagina", "Nuestro Catálogo");
         }
+
+        if (productos.isEmpty()) {
+            modelo.addAttribute("mensajeNoResultados", "No se encontraron productos.");
+        }
+
         modelo.addAttribute("productos", productos);
         return "productos/catalogo";
     }
@@ -52,7 +52,7 @@ public class ProductoController {
      */
     @GetMapping("/buscar-nombre")
     public String buscarPorNombre(@RequestParam("nombre") String nombre, Model modelo) {
-        List<Producto> productos = productoService.buscarPorNombre(nombre);
+        List<Producto> productos = productoService.findByNombreContainingIgnoreCase(nombre);
         modelo.addAttribute("productos", productos);
         modelo.addAttribute("tituloPagina", "Resultados para: " + nombre);
         return "productos/catalogo";

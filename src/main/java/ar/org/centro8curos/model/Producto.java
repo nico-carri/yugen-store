@@ -14,37 +14,39 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "productos")
+@Table(name = "PRODUCTOS")
 public class Producto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_producto")
+    @Column(name = "ID_PRODUCTO")
     private Integer idProducto;
 
     @NotBlank(message = "El nombre no puede estar vacio")
-    @Column(name = "nombre", nullable = false)
+    @Column(name = "NOMBRE", nullable = false)
     private String nombre;
 
-    @Column(name = "precio", nullable = false)
+    @Column(name = "PRECIO", nullable = false)
     @NotNull(message = "El precio no puede ser nulo")
     private BigDecimal precio;
 
     @NotNull(message = "El stock no puede ser nulo")
-    @Column(name = "stock", nullable = false)
+    @Column(name = "STOCK", nullable = false)
     private Integer stock;
 
-    @Column(name = "descripcion", nullable = true)
+    @Column(name = "DESCRIPCION", nullable = true)
     private String descripcion;
 
     @NotBlank(message = "La categoria no puede estar vacia")
-    @Column(name = "categoria", nullable = false)
+    @Column(name = "CATEGORIA", nullable = false)
     private String categoria;
 
     @NotBlank(message = "La imagen no puede estar vacia")
-    @Column(name = "urlImg", nullable = false)
+    @Column(name = "URL_IMG", nullable = false)
     private String urlImg;
 
+    @Column(name = "ACTIVO", nullable = false)
+    @Convert(converter = org.hibernate.type.NumericBooleanConverter.class)
     private boolean activo = true;
 
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)

@@ -1,0 +1,13 @@
+services:
+  app:
+    build: .
+    container_name: yugen-app
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+    volumes:
+      - ./wallet:/app/wallet:ro
+    restart: always

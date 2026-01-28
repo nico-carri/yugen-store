@@ -22,12 +22,8 @@ public class ProductoServiceImpl implements IProductoService {
     }
 
     @Override
-    public List<Producto> findAllByCategory(String categoria) {
+    public List<Producto> findAllByCategoria(String categoria) {
         return productoRepository.findByCategoriaAndActivoTrue(categoria);
-    }
-
-    public List<Producto> buscarPorNombre(String nombre) {
-        return productoRepository.findByNombreAndActivoTrue(nombre);
     }
 
     @Override
@@ -37,6 +33,10 @@ public class ProductoServiceImpl implements IProductoService {
 
     @Override
     public Producto save(Producto producto) {
+
+        // TODO: Enviar actualización a Salesforce CRM vía REST API
+    // salesforceService.upsertProduct(guardado);
+
         return productoRepository.save(producto);
     }
 
@@ -48,5 +48,16 @@ public class ProductoServiceImpl implements IProductoService {
             p.setActivo(false);
             productoRepository.save(p);
         }
+    }
+
+    @Override
+    public long countProductos() {
+        return productoRepository.count();
+    }
+
+    @Override
+    public List<Producto> findByNombreContainingIgnoreCase(String keyword) {
+        System.out.println("Buscando productos con keyword: " + keyword);
+        return productoRepository.findByNombreContainingIgnoreCase(keyword);
     }
 }

@@ -12,33 +12,33 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "detalles_pedido")
+@Table(name = "DETALLES_PEDIDO")
 public class DetallesPedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_detalle")
+    @Column(name = "ID_DETALLE")
     private Integer idDetallesPedido;
 
     @ManyToOne
-    @JoinColumn(name = "id_pedido", nullable = false)
+    @JoinColumn(name = "ID_PEDIDO", nullable = false)
     @NotNull(message = "El pedido no puede estar vacio")
     private Pedido pedido;
 
     @ManyToOne
-    @JoinColumn(name = "id_producto", nullable = false)
+    @JoinColumn(name = "ID_PRODUCTO", nullable = false)
     @NotNull(message = "El producto no puede estar vacio")
     private Producto producto;
 
     @NotNull(message = "La cantidad no puede estar vacia")
-    @Column(name = "cantidad", nullable = false)
+    @Column(name = "CANTIDAD", nullable = false)
     private Integer cantidad;
 
     @NotNull(message = "El precio unitario no puede estar vacio")
-    @Column(name = "precio_unitario", nullable = false)
+    @Column(name = "PRECIO_UNITARIO", nullable = false)
     private BigDecimal precioUnitario;
 
-    @Column(name = "sub_total", nullable = false, precision = 12, scale = 2)
+    @Column(name = "SUB_TOTAL", nullable = false, precision = 12, scale = 2)
     private BigDecimal subTotal;
 
     public BigDecimal getSubTotal() {
