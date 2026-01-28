@@ -2,8 +2,8 @@ services:
   app:
     build: .
     container_name: yugen-app
-    ports:
-      - "8080:8080"
+    expose:
+      - "8080"
     env_file:
       - .env
     environment:
@@ -11,3 +11,17 @@ services:
     volumes:
       - ./wallet:/app/wallet:ro
     restart: always
+
+  proxy:
+    image: "jc21/nginx-proxy-manager:latest"
+    container_name: yugen-proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "81:81"
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+    depends_on:
+      - app
