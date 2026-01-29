@@ -36,7 +36,7 @@ La arquitectura está diseñada para separar las responsabilidades y garantizar 
 
 ## Demo en Vivo
 Puedes acceder a la aplicación desplegada en Oracle Cloud aquí: 
-[https://yugen-store.duckdns.org/](https://yugen-store.duckdns.org/)
+[https://yugen-store.duckdns.org/](https://yugen-ecommerce.kozow.com/)
 
 ## Credenciales de Acceso (Demo)
 
