@@ -21,8 +21,16 @@ Como aspirante a **Analista de Datos**, este proyecto se enfocó en el ciclo de 
 
 **Acceso al Tablero Interactivo:** [Ver Dashboard en Tableau Public](https://public.tableau.com/app/profile/nicolas.carrizo/viz/E-commerceDashboarddeVentas/DashboarddeVentas?publish=yes)
 
+### Flujo de Datos y Arquitectura
+La arquitectura está diseñada para separar las responsabilidades y garantizar la escalabilidad:
+
+1. **Capa de Aplicación (Backend):** Spring Boot gestiona la lógica de negocio y la seguridad con Spring Security.
+2. **Capa de Datos (Persistencia):** Los datos transaccionales residen en **Oracle Autonomous DB**, mientras que los archivos multimedia (fotos de productos) se sirven directamente desde **Oracle Object Storage** para optimizar el rendimiento del servidor.
+3. **Capa de Integración:** Se utiliza una Service Layer para la sincronización de clientes y ventas con **Salesforce API**.
+4. **Capa de Inteligencia (BI):** Los datos se extraen y procesan para alimentar un dashboard interactivo en **Tableau**, permitiendo la toma de decisiones basada en métricas reales de la tienda.
+
 ## Desafíos Técnicos Resueltos
-* **Arquitectura Cloud:** Implementación de **Oracle Object Storage** para desacoplar los assets multimedia de la lógica de aplicación.
+* **Arquitectura Cloud:** Implementación de **Oracle Object Storage** para desacoplar los assets multimedia de la lógica de aplicación. Despliegue automatizado mediante Docker Compose con una arquitectura de microservicios aislada.
 * **Redes y Seguridad:** Configuración de **Reverse Proxy** con Nginx para gestión de SSL (Let's Encrypt) y aislamiento de contenedores.
 * **Optimización Linux:** Configuración de **Memory Swap** para estabilizar la JVM en instancias con recursos limitados.
 
@@ -37,6 +45,13 @@ Puedes acceder a la aplicación desplegada en Oracle Cloud aquí:
 | **Cliente** | `cliente@gmail.com` | `123456` | Flujo de compra y carrito |
 | **Administrador** | `admin@yugen.com` | `Yugen2026` | Dashboard de Salesforce y Reportes |
 
+> [!IMPORTANT]
+> **Cómo ver los gráficos de BI en la App:**
+> Para visualizar la integración de Tableau dentro de la plataforma:
+> 1. Inicie sesión con la cuenta de **Administrador**.
+> 2. Diríjase a **Cuenta** > **Mi Perfil**.
+> 3. Haga clic en el botón **"Ver gráficos"**.
+
 ## Roadmap
 * **Analítica Predictiva:** Implementación de modelos de stock basados en historial de ventas.
 * **Optimización de Capas:** Refactorización de DTOs para mejorar la eficiencia del transporte de datos.
@@ -48,6 +63,6 @@ Puedes acceder a la aplicación desplegada en Oracle Cloud aquí:
 ¡Estoy abierto a nuevas oportunidades y colaboraciones! Podés encontrarme en:
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/nicolascarrizo938/)
-[![Gmail](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:carrizonicolasd8@@gmail.com)
+[![Gmail](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:carrizonicolasd8@gmail.com)
 
 > Si querés ver el código en acción o discutir la arquitectura de datos, no dudes en escribirme.
