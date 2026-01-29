@@ -20,38 +20,105 @@ body {
     flex: 1 0 auto;
 }
 
-/* Con esto controlás todo el fondo y los textos del Nav */
+/*paleta de colores de la */
+:root {
+    --yugen-red: #b32e2e;      /* rojo del torii */
+    --yugen-pink: #ff6f91;     /* rosa de la flor */
+    --yugen-dark: #1a1a1a;     /* negro del fondo */
+    --yugen-cream: #fdf5e6;    /* crema del fondo del logo */
+}
+
+/* para que afecte a todo */
+.text-primary {
+    color: var(--yugen-red) !important;
+}
+
+.btn-primary {
+    background-color: var(--yugen-red) !important;
+    border-color: var(--yugen-red) !important;
+}
+
+.btn-outline-primary {
+    color: var(--yugen-red) !important;
+    border-color: var(--yugen-red) !important;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--yugen-red) !important;
+    color: white !important;
+}
+
+.bg-primary {
+    background-color: var(--yugen-red) !important;
+}
+
+.navbar-brand span, .nav-link {
+    color: var(--yugen-cream) !important; /
+}
+
+.navbar-toggler-icon {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.bg-primary-subtle {
+    background-color: rgba(179, 46, 46, 0.1) !important;
+}
+
+/* para pisar el azul de Bootstrap con el rojo */
+.text-primary { color: var(--yugen-red) !important; }
+.bg-primary { background-color: var(--yugen-red) !important; }
+
+.btn-primary {
+    background-color: var(--yugen-red) !important;
+    border-color: var(--yugen-red) !important;
+}
+
+.btn-outline-primary {
+    color: var(--yugen-red) !important;
+    border-color: var(--yugen-red) !important;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--yugen-red) !important;
+    color: white !important;
+}
+
+/* el fondo y los textos del Nav */
 .navbar {
-    background-color: #1a1a1a !important; /* Poné acá el color que quieras */
+    background-color: #1a1a1a !important;
 }
 
 .navbar .nav-link, .navbar .navbar-brand {
-    color: white !important; /* Para que los textos se vean sobre el fondo oscuro */
+    color: white !important;
 }
 
 .navbar-custom .bi-cart-fill {
     color: #ffffff !important;
 }
 
-/* Esto fuerza a que el icono de Bootstrap y el botón se vean blancos */
+/* fuerza a que el icono y el botón se vean blancos */
 .navbar .bi-cart-fill, 
 .navbar .bi-cart {
     color: #ffffff !important;
 }
 
-/* Si tu botón tiene la clase btn-outline-white, aseguremos su estilo */
+/* botón */
 .navbar .btn-outline-white {
     border-color: rgba(255, 255, 255, 0.6) !important;
     color: #ffffff !important;
 }
 
-/* Estilo para el badge (el numerito del carrito) para que no se pierda */
+/* estilo para el badge, el numerito del carrito*/
 .navbar .badge {
     background-color: #ff6f91 !important; /* Rosa para mantener la identidad */
     color: white !important;
 }
 
-/* Efecto hover profesional para el carrito */
+/* efecto hover profesional para el carrito */
 .navbar .btn-outline-white:hover {
     background-color: rgba(255, 255, 255, 0.1) !important;
     transform: scale(1.05);
@@ -59,7 +126,7 @@ body {
 
 
 
-/* Estilo para el botón circular del carrito */
+/* estilo para el botón circular del carrito */
 .navbar-custom .btn-outline-white {
     border-color: rgba(255, 255, 255, 0.5) !important;
     color: white !important;
@@ -74,8 +141,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid #198754; 
-    background-color: #f8f9fa;
+    border: 2px solid #871926;
+    background-color: #871926;
 }
 
 .logo-circle img {
@@ -276,23 +343,60 @@ body {
 
 
 
-@media print {
-    .navbar, .btn, footer, .card-footer, .breadcrumb, .whatsapp-float {
-        display: none !important;
-    }
-    
+@media (max-width: 768px) {
+
+    /* Header */
     body {
-        background-color: white !important;
-        padding-top: 0 !important;
+        padding-top: 70px;
     }
-    .card {
-        border: none !important;
-        box-shadow: none !important;
+
+    .logo-circle {
+        width: 45px;
+        height: 45px;
     }
-    .container {
-        width: 100% !important;
-        max-width: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
+
+    .navbar-brand span {
+        font-size: 1.1rem !important;
+    }
+
+    /* categorías y cards */
+    .category-img-container {
+        height: 180px;
+    }
+
+    .category-name {
+        font-size: 0.9rem;
+        padding: 5px 10px;
+        letter-spacing: 1px;
+    }
+
+    /* botón WhatsApp */
+    .whatsapp-float {
+        width: 50px;
+        height: 50px;
+        bottom: 20px;
+        right: 20px;
+        font-size: 24px;
+    }
+
+    /* 4. Footer */
+    .footer-custom {
+        text-align: center;
+    }
+
+    .footer-custom .text-md-start {
+        text-align: center !important;
+    }
+
+    /* carrito y buscador */
+    .navbar .btn-outline-white {
+        margin-bottom: 10px;
+    }
+}
+
+/* PANTALLAS EXTRA CHICAS */
+@media (max-width: 400px) {
+    .navbar-brand span {
+        display: none;
     }
 }
