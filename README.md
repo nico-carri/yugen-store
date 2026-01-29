@@ -35,7 +35,7 @@ La arquitectura está diseñada para separar las responsabilidades y garantizar 
 * **Optimización Linux:** Configuración de **Memory Swap** para estabilizar la JVM en instancias con recursos limitados.
 
 ## Demo en Vivo
-Puedes acceder a la aplicación desplegada en Oracle Cloud aquí: 
+Podés acceder a la aplicación desplegada en Oracle Cloud aquí: 
 [https://yugen-ecommerce.kozow.com/](https://yugen-ecommerce.kozow.com/)
 
 ## Credenciales de Acceso (Demo)
