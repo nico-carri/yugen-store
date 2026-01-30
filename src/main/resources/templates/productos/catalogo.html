@@ -38,7 +38,7 @@
                     </div>
 
                     <div class="card-footer bg-white border-top-0 pb-3">
-                        <form onsubmit="event.preventDefault(); agregarAsync(this);">
+                        <form onsubmit="event.preventDefault(); if(verificarAcceso(event)) agregarAsync(this);">
                             <input type="hidden" name="id" th:value="${p.idProducto}">
                             <input type="hidden" name="cantidad" value="1">
                             <button type="submit" class="btn btn-dark w-100 fw-bold">
@@ -68,13 +68,7 @@
 
     <script th:inline="javascript">
         function manejarAgregar(form) {
-                // En lugar de usar la variable fija, le preguntamos al header si hay un objeto de usuario
-                // Esta es una forma mucho más segura y dinámica
-                const userMark = document.querySelector('.navbar'); // O cualquier elemento que cambie al loguearte
-                
-                // Usamos la variable de Thymeleaf pero asegurándonos de que se evalúe bien
-                //const loggedIn = [[${#authorization.expression('isAuthenticated()')}]];
-                
+                const userMark = document.querySelector('.navbar');
                 agregarAsync(form, loggedIn); 
         }
     </script>

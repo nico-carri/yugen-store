@@ -32,7 +32,7 @@ public class HomeController {
         categorias.put("Peluches", baseUrl + "cat-peluches.jpg");
         categorias.put("Indumentaria", baseUrl + "cat-indumentaria.jpg");
         categorias.put("Escolar", baseUrl + "cat-escolar.jpg");
-        categorias.put("CD, DVD & Blu-rays", baseUrl + "cat-multimedia.jpg");
+        categorias.put("Multimedia", baseUrl + "cat-multimedia.jpg");
         categorias.put("Otros", baseUrl + "cat-otros.jpg");
         model.addAttribute("mapaCategorias", categorias);
 

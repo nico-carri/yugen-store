@@ -46,11 +46,12 @@
                                         <a th:href="@{/admin/productos/editar/{id}(id=${prod.idProducto})}" class="btn btn-sm btn-outline-dark">
                                             <i class="bi bi-pencil"></i>
                                         </a>
-                                        <a th:href="@{/admin/productos/eliminar/{id}(id=${prod.idProducto})}" 
-                                        class="btn btn-sm btn-outline-danger"
-                                        onclick="return confirm('¿Seguro que deseas eliminar este producto?')">
+
+                                        <button type="button"
+                                                class="btn btn-sm btn-outline-danger"
+                                                th:onclick="'confirmarEliminar(' + ${prod.idProducto} + ')'">
                                             <i class="bi bi-trash"></i>
-                                        </a>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>

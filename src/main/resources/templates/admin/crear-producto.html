@@ -76,7 +76,7 @@
                         </div>
 
                         <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-primary px-4 fw-bold">GUARDAR PRODUCTO</button>
+                            <button type="button" class="btn btn-primary px-4 fw-bold" onclick="confirmarGuardar()">GUARDAR PRODUCTO</button>
                             <a th:href="@{/admin/productos}" class="btn btn-outline-secondary px-4">CANCELAR</a>
                         </div>
                     </form>
@@ -87,6 +87,7 @@
 
     <div th:replace="~{layout :: footer}"></div>
     <div th:replace="~{layout :: js-scripts}"></div>
+
 </body>
 
 </html>

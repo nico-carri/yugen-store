@@ -7,6 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link th:href="@{/css/style.css}" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="https://axmjtpthgvgy.objectstorage.sa-vinhedo-1.oci.customer-oci.com/n/axmjtpthgvgy/b/yugen-imagenes/o/assets/logo.png">
 </head>
 
 <body>
@@ -75,12 +76,15 @@
                             <a class="nav-link dropdown-toggle" href="#" id="cuentaDropdown"
                                 data-bs-toggle="dropdown">Cuenta</a>
                             <ul class="dropdown-menu shadow-sm">
-                                <li><a class="dropdown-item" th:href="@{/usuario/registro}">Crear Cuenta</a></li>
-                                <li><a class="dropdown-item" th:href="@{/usuario/login}">Iniciar Sesión</a></li>
+                                <li sec:authorize="!isAuthenticated()">
+                                    <a class="dropdown-item" th:href="@{/usuario/registro}">Crear Cuenta</a></li>
+                                <li sec:authorize="!isAuthenticated()">
+                                    <a class="dropdown-item" th:href="@{/usuario/login}">Iniciar Sesión</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item" th:href="@{/usuario/perfil}">Mi Perfil</a></li>
+                                <li sec:authorize="isAuthenticated()">
+                                    <a class="dropdown-item" th:href="@{/usuario/perfil}">Mi Perfil</a></li>
 
                                 <li sec:authorize="isAuthenticated()">
                                     <form th:action="@{/usuario/logout}" method="post" id="logoutForm"
@@ -184,6 +188,31 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <script th:inline="javascript">
+
+            function verificarAcceso(event) {
+                const isAuthenticated = /*[[${#authorization.expression('isAuthenticated()')}]]*/ false;
+                if (!isAuthenticated) {
+                    if (event) event.preventDefault();
+
+                    Swal.fire({
+                        title: '¡Hola, entusiasta!',
+                        text: 'Para añadir productos al carrito y gestionar tus pedidos, por favor inicia sesión.',
+                        icon: 'info',
+                        showCancelButton: true,
+                        confirmButtonColor: '#b32e2e',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'Iniciar Sesión',
+                        cancelButtonText: 'Seguir mirando'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = /*[[@{/usuario/login}]]*/ '/usuario/login';
+                        }
+                    });
+                    return false;
+                }
+                return true;
+            }
+
             document.addEventListener('DOMContentLoaded', function() {
                 const mensajeExito = /*[[${mensaje}]]*/ null;
                 const mensajeError = /*[[${error}]]*/ null;
@@ -216,6 +245,39 @@
                     });
                 }
             });
+
+            function confirmarEliminar(id) {
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: "Como esto es un demo, la eliminación real está deshabilitada.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Entendido'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/admin/proximamente';
+                    }
+                });
+            }
+
+            function confirmarGuardar() {
+                Swal.fire({
+                    title: 'Simulación de Guardado',
+                    text: "En este demo, la creación de nuevos productos está deshabilitada para mantener el catálogo limpio.",
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    /*confirmButtonText: 'Ver cómo quedaría',*/
+                    cancelButtonText: 'Volver'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/admin/proximamente';
+                    }
+                });
+            }
         </script>
     </div>
 </body>

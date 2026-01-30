@@ -56,12 +56,14 @@
             <div class="category-img-container rounded shadow-sm">
               <img th:src="${entry.value}" class="category-img" th:alt="${entry.key}">
               <div class="category-overlay">
-                <span class="category-name" th:text="${entry.key}">NOMBRE</span>
+               <span class="category-name"
+                     th:text="${entry.key == 'Multimedia' ? 'CD, DVD & Blu-rays' : entry.key}">
+                      NOMBRE
+                </span>
               </div>
             </div>
           </a>
         </div>
-
       </div>
     </section>
 

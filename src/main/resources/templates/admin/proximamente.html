@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head}"></head>
+<body class="d-flex flex-column min-vh-100">
+<div th:replace="~{layout :: header}"></div>
+
+<main class="container text-center my-auto" style="margin-top: 150px !important;">
+    <div class="py-5">
+        <i class="bi bi-cone-striped text-warning" style="font-size: 4rem;"></i>
+        <h1 class="fw-bold mt-4">¡Estamos trabajando en esto!</h1>
+        <p class="lead text-muted">
+            Esta función de gestión (Borrar/Guardar) está deshabilitada en la versión <strong>DEMO</strong>
+            para proteger la integridad de la base de datos compartida.
+        </p>
+        <hr class="my-4 mx-auto" style="width: 50%;">
+        <a th:href="@{/}" class="btn btn-primary btn-lg px-5 shadow-sm" style="background-color: #d33;">
+            Volver al Inicio
+        </a>
+    </div>
+</main>
+
+<div th:replace="~{layout :: footer}"></div>
+</body>
+</html>

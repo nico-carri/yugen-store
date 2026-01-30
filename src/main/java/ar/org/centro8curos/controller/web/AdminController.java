@@ -67,10 +67,10 @@ public class AdminController {
     Producto producto = productoService.findById(id)
         .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
     
-    model.addAttribute("producto", producto);
-    model.addAttribute("titulo", "Editar Producto: " + producto.getNombre());
-    return "admin/crear-producto";
-}
+        model.addAttribute("producto", producto);
+        model.addAttribute("titulo", "Editar Producto: " + producto.getNombre());
+        return "admin/crear-producto";
+    }
 
     @PostMapping("/productos/guardar")
     public String guardarProducto(@ModelAttribute("producto") Producto producto) {
@@ -119,4 +119,13 @@ public class AdminController {
 
         return "admin/graficos";
     }
+
+    @GetMapping("/proximamente")
+    public String paginaProximamente(Model model) {
+        model.addAttribute("titulo", "Funcionalidad en Desarrollo");
+        return "admin/proximamente";
+    }
+
+
+
 }
